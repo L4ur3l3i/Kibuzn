@@ -1,0 +1,178 @@
+<?php
+
+namespace Kibuzn\Entity;
+
+use DateTimeImmutable;
+use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Kibuzn\Repository\TransactionRepository;
+
+#[ORM\Entity(repositoryClass: TransactionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+class Transaction
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?DateTimeInterface $transaction_date = null;
+
+    #[ORM\Column]
+    private ?float $amount = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?bool $is_recurrent = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $recurrence_number = null;
+
+    #[ORM\Column]
+    private ?DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?DateTimeImmutable $updated_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $deleted_at = null;
+
+    // Renamed recurring_transaction_id to recurringTransaction
+    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    private ?RecurringTransaction $recurringTransaction = null;
+
+    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Account $account = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTransactionDate(): ?\DateTimeInterface
+    {
+        return $this->transaction_date;
+    }
+
+    public function setTransactionDate(\DateTimeInterface $transaction_date): static
+    {
+        $this->transaction_date = $transaction_date;
+
+        return $this;
+    }
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): static
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isRecurrent(): ?bool
+    {
+        return $this->is_recurrent;
+    }
+
+    public function setRecurrent(bool $is_recurrent): static
+    {
+        $this->is_recurrent = $is_recurrent;
+
+        return $this;
+    }
+
+    public function getRecurrenceNumber(): ?int
+    {
+        return $this->recurrence_number;
+    }
+
+    public function setRecurrenceNumber(?int $recurrence_number): static
+    {
+        $this->recurrence_number = $recurrence_number;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAt(): void
+    {
+        $now = new DateTimeImmutable();
+        $this->created_at = $now;
+        $this->updated_at = $now;
+    }
+
+    public function getUpdatedAt(): DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
+    {
+        $this->updated_at = new DateTimeImmutable();
+    }
+
+    public function getDeletedAt(): ?DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
+    public function setDeletedAt(?DateTimeImmutable $deleted_at): static
+    {
+        $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    // Updated method name to reflect the relationship object
+    public function getRecurringTransaction(): ?RecurringTransaction
+    {
+        return $this->recurringTransaction;
+    }
+
+    // Updated method name to reflect the relationship object
+    public function setRecurringTransaction(?RecurringTransaction $recurringTransaction): static
+    {
+        $this->recurringTransaction = $recurringTransaction;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): static
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+}

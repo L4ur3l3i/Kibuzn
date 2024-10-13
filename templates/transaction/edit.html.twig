@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Edit Transaction
+{% endblock %}
+
+{% block content %}
+
+
+	<div class="sm:flex sm:items-center">
+
+		<div class="sm:flex-auto">
+			{% include '_elements/_back_button.html.twig' with {'to': 'Transactions', 'route': path('app_transaction_index')} %}
+			<h1 class="text-base font-semibold leading-6 text-gray-900">Edit Transaction</h1>
+		</div>
+
+	</div>
+
+	{{ include('transaction/_form.html.twig') }}
+
+{# {{ include('transaction/_delete_form.html.twig') }} #}
+
+{% endblock %}

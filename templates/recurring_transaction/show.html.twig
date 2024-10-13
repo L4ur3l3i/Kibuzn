@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RecurringTransaction{% endblock %}
+
+{% block body %}
+    <h1>RecurringTransaction</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recurring_transaction.id }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ recurring_transaction.amount }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ recurring_transaction.description }}</td>
+            </tr>
+            <tr>
+                <th>Recurrence_interval</th>
+                <td>{{ recurring_transaction.recurrenceInterval }}</td>
+            </tr>
+            <tr>
+                <th>Recurrence_value</th>
+                <td>{{ recurring_transaction.recurrenceValue }}</td>
+            </tr>
+            <tr>
+                <th>Recurrence_end_date</th>
+                <td>{{ recurring_transaction.recurrenceEndDate ? recurring_transaction.recurrenceEndDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ recurring_transaction.createdAt ? recurring_transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ recurring_transaction.updatedAt ? recurring_transaction.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Deleted_at</th>
+                <td>{{ recurring_transaction.deletedAt ? recurring_transaction.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_recurring_transaction_index') }}">back to list</a>
+
+    <a href="{{ path('app_recurring_transaction_edit', {'id': recurring_transaction.id}) }}">edit</a>
+
+    {{ include('recurring_transaction/_delete_form.html.twig') }}
+{% endblock %}

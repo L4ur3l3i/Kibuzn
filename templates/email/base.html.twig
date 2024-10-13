@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+	</head>
+	<head>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:300,600" rel="stylesheet" />
+
+		<style>
+            html {
+                background-color: #f3f4f6;
+            }
+			body {
+                font-family: 'Inter', sans-serif;
+                font-size: 14px;
+                color: #111827;
+                background-color: #ffffff;
+                max-width: 600px;
+                margin: 1rem auto;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            header {
+                text-align: center;
+            }
+		</style>
+	</head>
+
+	<body>
+        <header>
+            <img src="{{ absolute_url(asset('images/logos/kibuzn_logo_300x83.png')) }}" alt="Logo">
+        </header>
+        <main>
+		{% block body %}{% endblock %}
+        </main>
+        <footer>
+            <p>Best regards, </p>
+            <p><strong>The Kibuzn Team</strong></p>
+
+            <p>
+                <small>
+                    <a href="{{ absolute_url(path('app_login')) }}">Kibuzn</a> | 
+                    <a href="#">Contact</a> | 
+                    <a href="#">Privacy Policy</a>
+                    {# <a href="{{ absolute_url(path('app_contact')) }}">Contact</a> | 
+                    <a href="{{ absolute_url(path('app_privacy_policy')) }}">Privacy Policy</a> #}
+                </small>
+        </footer>
+	</body>
+</html>

@@ -1,0 +1,228 @@
+{# 
+Parameters:
+- type: the type of flash message (success, error, warning, info)
+- message: the message to display
+- description: the description of the message (optional)
+- list: a list of items to display (optional)
+- buttons: a list of buttons to display | optional, have to be an array of arrays with the following keys:
+    - label: the label of the button
+    - route: the route to go to
+- rightlink: a link to display on the right of the message | optional, have to be an array with the following keys:
+    - label: the label of the link
+    - route: the route to go to
+- dismissable: a boolean to display a dismiss cross | optional, except if the rightlink is set
+
+It's either dismissable or rightlink, not both.
+It's either buttons or rightlink, not both.
+
+Only the type and message are required.
+#}
+
+{% set type = type ?? 'info' %}
+{% set description = description ?? null %}
+{% set list = list ?? null %}
+{% set buttons = buttons ?? null %}
+{% set rightlink = buttons is not empty ? null : (rightlink ?? null) %}
+{% set dismissable = dismissable is not null ? dismissable : (rightlink is null) %}
+
+{# Store Tailwind color classes for the flash message types in an array #}
+{% set color = {
+        'success': {
+            'bg':     'bg-green-50',
+            'text':   'text-green-800',
+            'icon':   'text-green-400',
+            'ring':   'focus:ring-green-600',
+            'hover':  'hover:bg-green-100'
+        },
+        'error': {
+            'bg':     'bg-red-50',
+            'text':   'text-red-800',
+            'icon':   'text-red-400',
+            'ring':   'focus:ring-red-600',
+            'hover':  'hover:bg-red-100'
+        },
+        'warning': {
+            'bg':     'bg-yellow-50',
+            'text':   'text-yellow-800',
+            'icon':   'text-yellow-400',
+            'ring':   'focus:ring-yellow-600',
+            'hover':  'hover:bg-yellow-100'
+        },
+        'info': {
+            'bg':     'bg-blue-50',
+            'text':   'text-blue-800',
+            'icon':   'text-blue-400',
+            'ring':   'focus:ring-blue-600',
+            'hover':  'hover:bg-blue-100'
+        }
+    } %}
+
+{# Store svg paths #}
+{% set svg_path = {
+  'success':  '<path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />',
+  'error':    '<path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z" clip-rule="evenodd" />',
+  'warning':  '<path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd"/>',
+  'info':     '<path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />'
+}%}
+
+<div class="rounded-md {{ color[type].bg }} p-4 fixed top-5 right-5 z-50 max-w-lg p-4 bg-gray-100 shadow-lg border rounded-lg opacity-0 translate-y-[-10px] transition-all duration-500 ease-in-out" data-controller="flash-message" data-flash-message-target="flashMessage">
+	<div class="flex">
+		<div class="flex-shrink-0">
+			<svg
+				class="h-5 w-5 {{ color[type].icon }}" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        {{ svg_path[type]|raw }}
+			</svg>
+		</div>
+		<div class="ml-3 flex-1">
+			<h3 class="text-sm font-medium {{ color[type].text }}">{{ message }}</h3>
+			<div class="mt-2 text-sm {{ color[type].text }}">
+				{% if description %}
+					<p>{{ description }}</p>
+				{% endif %}
+				{% if list %}
+					<ul role="list" class="list-disc space-y-1 pl-5">
+						{% for item in list %}
+							<li>{{ item }}</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			{% if buttons or rightlink %}
+				<div class="mt-4 flex items-center space-x-3">
+					{% if buttons %}
+						{% for button in buttons %}
+							<a href="{{ button.route }}" class="rounded-md {{ color[type].bg }} px-2 py-1.5 text-sm font-medium {{ color[type].text }} {{ color[type].hover }} focus:outline-none focus:ring-2 {{ color[type].ring }} focus:ring-offset-2 focus:ring-offset-{{ color[type].bg }}">
+								{{ button.label }}
+							</a>
+						{% endfor %}
+					{% endif %}
+					{% if rightlink %}
+						<a href="{{ rightlink.route }}" class="ml-auto rounded-md {{ color[type].bg }} px-2 py-1.5 text-sm font-medium {{ color[type].text }} {{ color[type].hover }} focus:outline-none focus:ring-2 {{ color[type].ring }} focus:ring-offset-2 focus:ring-offset-{{ color[type].bg }}">
+							{{ rightlink.label }}
+							<span aria-hidden="true">
+								&rarr;</span>
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+		{% if dismissable %}
+			<div class="ml-auto pl-3">
+				<button type="button" class="inline-flex rounded-md {{ color[type].bg }} p-1.5 {{ color[type].icon }} {{ color[type].hover }} focus:outline-none focus:ring-2 {{ color[type].ring }} focus:ring-offset-2 focus:ring-offset-{{ color[type].bg }}" data-action="flash-message#dismiss">
+					<span class="sr-only">Dismiss</span>
+					<svg class="h-5 w-5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+						<path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/>
+					</svg>
+				</button>
+			</div>
+		{% endif %}
+	</div>
+</div>
+
+{# 
+
+<!-- With description: -->
+<div class="rounded-md bg-yellow-50 p-4">
+	<div class="flex">
+		<div class="flex-shrink-0">
+			<svg class="h-5 w-5 text-yellow-400" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+				<path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd"/>
+			</svg>
+		</div>
+		<div class="ml-3">
+			<h3 class="text-sm font-medium text-yellow-800">Attention needed</h3>
+			<div class="mt-2 text-sm text-yellow-700">
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum similique veniam quo totam eius aperiam dolorum.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- With list: -->
+<div class="rounded-md bg-red-50 p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-red-800">There were 2 errors with your submission</h3>
+      <div class="mt-2 text-sm text-red-700">
+        <ul role="list" class="list-disc space-y-1 pl-5">
+          <li>Your password must be at least 8 characters</li>
+          <li>Your password must include at least one pro wrestling finishing move</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- With buttons: -->
+<div class="rounded-md bg-green-50 p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-green-800">Order completed</h3>
+      <div class="mt-2 text-sm text-green-700">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum similique veniam.</p>
+      </div>
+      <div class="mt-4">
+        <div class="-mx-2 -my-1.5 flex">
+          <button type="button" class="rounded-md bg-green-50 px-2 py-1.5 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50">View status</button>
+          <button type="button" class="ml-3 rounded-md bg-green-50 px-2 py-1.5 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- With right link: -->
+<div class="rounded-md bg-blue-50 p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3 flex-1 md:flex md:justify-between">
+      <p class="text-sm text-blue-700">A new software update is available. See what’s new in version 2.0.4.</p>
+      <p class="mt-3 text-sm md:ml-6 md:mt-0">
+        <a href="#" class="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600">
+          Details
+          <span aria-hidden="true"> &rarr;</span>
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- With dismissable: -->
+<div class="rounded-md bg-green-50 p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <p class="text-sm font-medium text-green-800">Successfully uploaded</p>
+    </div>
+    <div class="ml-auto pl-3">
+      <div class="-mx-1.5 -my-1.5">
+        <button type="button" class="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50">
+          <span class="sr-only">Dismiss</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 
+
+#}

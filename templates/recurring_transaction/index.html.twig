@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RecurringTransaction index{% endblock %}
+
+{% block body %}
+    <h1>RecurringTransaction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Recurrence_interval</th>
+                <th>Recurrence_value</th>
+                <th>Recurrence_end_date</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recurring_transaction in recurring_transactions %}
+            <tr>
+                <td>{{ recurring_transaction.id }}</td>
+                <td>{{ recurring_transaction.amount }}</td>
+                <td>{{ recurring_transaction.description }}</td>
+                <td>{{ recurring_transaction.recurrenceInterval }}</td>
+                <td>{{ recurring_transaction.recurrenceValue }}</td>
+                <td>{{ recurring_transaction.recurrenceEndDate ? recurring_transaction.recurrenceEndDate|date('Y-m-d') : '' }}</td>
+                <td>{{ recurring_transaction.createdAt ? recurring_transaction.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ recurring_transaction.updatedAt ? recurring_transaction.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ recurring_transaction.deletedAt ? recurring_transaction.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_recurring_transaction_show', {'id': recurring_transaction.id}) }}">show</a>
+                    <a href="{{ path('app_recurring_transaction_edit', {'id': recurring_transaction.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_recurring_transaction_new') }}">Create new</a>
+{% endblock %}

@@ -3,7 +3,7 @@ framework:
         failure_transport: failed
 
         transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            # Async transport for most messages
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
@@ -12,8 +12,12 @@ framework:
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
+            
+            # Transport for failed messages
             failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+
+            # Sync transport specifically for mailer
+            sync_mailer: 'sync://'
 
         default_bus: messenger.bus.default
 
@@ -21,9 +25,12 @@ framework:
             messenger.bus.default: []
 
         routing:
-            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
+            # Route mailer messages to the sync_mailer transport
+            Symfony\Component\Mailer\Messenger\SendEmailMessage: sync_mailer
+
+            # Route chat and SMS messages to async transport
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
 
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            # Your custom messages can still go to async if needed
+            # 'Kibuzn\Message\YourMessage': async

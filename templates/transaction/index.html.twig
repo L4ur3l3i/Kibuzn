@@ -1,0 +1,192 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Transaction index
+{% endblock %}
+
+{% block content %}
+
+		<div
+			class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+
+			<!-- Account summary -->
+			<div class="lg:col-start-3 lg:row-end-1">
+				<div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+					<dl class="flex flex-wrap">
+						<div class="flex-auto pl-6 pt-6">
+							<dt class="text-sm font-semibold leading-6 text-gray-900">October 2024 | Current balance</dt>
+							<dd class="mt-1 text-base font-semibold leading-6 text-gray-900">560,25 €</dd>
+						</div>
+						<div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+							<dt class="h-6 w-8 flex-none text-sm font-medium leading-6 text-gray-500">
+								Start
+							</dt>
+							<dd class="text-sm font-medium leading-6 text-gray-500">1294,65 €</dd>
+						</div>
+						<div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+							<dt class="h-6 w-8 flex-none text-sm font-medium leading-6 text-gray-500">
+								End
+							</dt>
+							<dd class="text-sm font-medium leading-6 text-gray-500">34,29 €</dd>
+						</div>
+						<div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+							<dt class="flex-none">
+								<svg fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 h-6 w-8 text-gray-400">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/>
+								</svg>
+							</dt>
+							<dd class="text-sm leading-6 text-gray-500">
+								<time datetime="2023-01-31">October 1st</time>
+								<p class="text-sm font-medium leading-6 text-gray-500">1489,56 €</p>
+							</dd>
+						</div>
+						<div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+							<dt class="flex-none">
+								<svg fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 h-6 w-8 text-gray-400">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181"/>
+								</svg>
+							</dt>
+							<dd class="text-sm leading-6 text-gray-500">
+								<time datetime="2023-01-31">October 24th</time>
+								<p class="text-sm font-medium leading-6 text-gray-500">12,32 €</p>
+							</dd>
+						</div>
+					</dl>
+					<div class="mt-6 border-t border-gray-900/5 px-6 py-6">
+						<a href="#" class="text-sm font-semibold leading-6 text-gray-900">Download statement</a>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Transactions list -->
+		<div class="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+			<div>
+				<div class="sm:flex sm:items-center">
+					<div class="sm:flex-auto">
+						<h1 class="text-base font-semibold leading-6 text-gray-900">Transactions</h1>
+						<p class="mt-2 text-sm text-gray-700">A list of all the transactions in your account.</p>
+					</div>
+					<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+						<a href="{{ path('app_transaction_new') }}" class="block rounded-md bg-violet-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600">Add a transaction</a>
+					</div>
+				</div>
+
+				<div class="mt-8 flow-root">
+					<div class="overflow-x-auto">
+						<div class="inline-block min-w-full align-middle">
+							<table class="min-w-full divide-y divide-gray-300">
+								<thead>
+									<tr>
+										<th scope="col" class="text-left text-sm font-semibold text-gray-900">Date</th>
+										<th scope="col" class="px-3 text-left text-sm font-semibold text-gray-900">Description</th>
+										<th scope="col" class="px-3 text-left text-sm font-semibold text-gray-900">Amount</th>
+										<th scope="col" class="px-3 text-left text-sm font-semibold text-gray-900">Actions</th>
+									</tr>
+								</thead>
+								<tbody
+									class="divide-y divide-gray-200">
+									<!-- Transactions records -->
+									{% for transaction in transactions %}
+										{% include "/transaction/fragments/_row.html.twig" with {transaction: transaction} %}
+									{% else %}
+										<tr>
+											<td colspan="4" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">No records found.</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Activity feed -->
+		<div class="lg:col-start-3">
+			<h2 class="text-sm font-semibold leading-6 text-gray-900">Activity</h2>
+			<ul role="list" class="mt-6 {# space-y-6 #}">
+				<li class="relative flex gap-x-4">
+					<div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<div class="relative flex h-6 w-6 flex-none items-center justify-center bg-grey-100">
+						<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
+					</div>
+					<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+						<span class="font-medium text-gray-900">Chelsea Hagon</span>
+						created the invoice.</p>
+					<time datetime="2023-01-23T10:32" class="flex-none py-0.5 text-xs leading-5 text-gray-500">7d ago</time>
+				</li>
+				<li class="relative flex gap-x-4">
+					<div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<div class="relative flex h-6 w-6 flex-none items-center justify-center bg-grey-100">
+						<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
+					</div>
+					<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+						<span class="font-medium text-gray-900">Chelsea Hagon</span>
+						edited the invoice.</p>
+					<time datetime="2023-01-23T11:03" class="flex-none py-0.5 text-xs leading-5 text-gray-500">6d ago</time>
+				</li>
+				<li class="relative flex gap-x-4">
+					<div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<div class="relative flex h-6 w-6 flex-none items-center justify-center bg-grey-100">
+						<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
+					</div>
+					<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+						<span class="font-medium text-gray-900">Chelsea Hagon</span>
+						sent the invoice.</p>
+					<time datetime="2023-01-23T11:24" class="flex-none py-0.5 text-xs leading-5 text-gray-500">6d ago</time>
+				</li>
+				<li class="relative flex gap-x-4">
+					<div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-50">
+					<div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
+						<div class="flex justify-between gap-x-4">
+							<div class="py-0.5 text-xs leading-5 text-gray-500">
+								<span class="font-medium text-gray-900">Chelsea Hagon</span>
+								commented</div>
+							<time datetime="2023-01-23T15:56" class="flex-none py-0.5 text-xs leading-5 text-gray-500">3d ago</time>
+						</div>
+						<p class="text-sm leading-6 text-gray-500">Called client, they reassured me the invoice would be paid by the 25th.</p>
+					</div>
+				</li>
+				<li class="relative flex gap-x-4">
+					<div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<div class="relative flex h-6 w-6 flex-none items-center justify-center bg-grey-100">
+						<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
+					</div>
+					<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+						<span class="font-medium text-gray-900">Alex Curren</span>
+						viewed the invoice.</p>
+					<time datetime="2023-01-24T09:12" class="flex-none py-0.5 text-xs leading-5 text-gray-500">2d ago</time>
+				</li>
+				<li class="relative flex gap-x-4">
+					<div class="absolute left-0 top-0 flex h-6 w-6 justify-center">
+						<div class="w-px bg-gray-200"></div>
+					</div>
+					<div class="relative flex h-6 w-6 flex-none items-center justify-center bg-grey-100">
+						<svg class="h-6 w-6 text-violet-600" viewbox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
+							<path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
+						<span class="font-medium text-gray-900">Alex Curren</span>
+						paid the invoice.</p>
+					<time datetime="2023-01-24T09:20" class="flex-none py-0.5 text-xs leading-5 text-gray-500">1d ago</time>
+				</li>
+			</ul>
+
+		</div>
+
+
+{% endblock %}
