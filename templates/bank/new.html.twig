@@ -1,0 +1,16 @@
+{% extends 'admin.html.twig' %}
+
+    {% block html_class %}h-full bg-gray-100
+    {% endblock %}
+    {% block body_class %}h-full
+    {% endblock %}
+
+{% block title %}New Bank{% endblock %}
+
+{% block content %}
+    <h1>Create new Bank</h1>
+
+    {{ include('bank/_form.html.twig') }}
+
+    <a href="{{ path('admin_bank_index') }}">back to list</a>
+{% endblock %}

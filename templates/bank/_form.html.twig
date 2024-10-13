@@ -1,0 +1,84 @@
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+
+{{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
+
+<!-- Bank Name (Conditional) -->
+{% if form.brand is defined %}
+	<div>
+		{{ form_label(form.brand, 'Bank Name', { 'label_attr': { 'class': 'block text-sm font-medium leading-6 text-gray-900' } }) }}
+		<div class="mt-2">
+			{{ form_widget(form.brand, { 'attr': { 'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-violet-600 sm:text-sm sm:leading-6' } }) }}
+		</div>
+		{{ form_errors(form.brand) }}
+	</div>
+{% endif %}
+
+<!-- Bank URL -->
+<div>
+	{{ form_label(form.url, 'Bank URL', { 'label_attr': { 'class': 'block text-sm font-medium leading-6 text-gray-900' } }) }}
+	<div class="mt-2">
+		{{ form_widget(form.url, { 'attr': { 'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-violet-600 sm:text-sm sm:leading-6' } }) }}
+	</div>
+	{{ form_errors(form.url) }}
+</div>
+
+<!-- Logo (Conditional) -->
+{% if form.logo is defined %}
+	<div
+		class="flex items-center gap-x-4">
+		<!-- Logo Input -->
+		<div class="flex items-center" data-controller="image-input">
+			{{ form_label(form.logo, 'Logo', { 'label_attr': { 'class': 'block text-sm font-medium leading-6 text-gray-900' } }) }}
+			<div class="ml-4">
+				<label for="bank_form_logo" class="cursor-pointer">
+					<img
+					    src="{{ asset(bank.logo is not null ? bank.logo : 'images/banks/default.jpg') }}" 
+                        alt="Bank Logo" class="h-24 w-24 rounded-md" 
+                        data-image-input-target="imagePreview"
+                        onclick="document.querySelector('[data-image-input-target=imageInput]').click();"
+                    >
+					<!-- Same Stimulus controller target -->
+                    </label>
+                    </div>
+                    {{ form_widget(form.logo, { 'attr': { 
+                    'class': 'hidden',
+                    'data-image-input-target': 'imageInput',
+                    'accept': '.jpg, .jpeg, .png, .gif, .svg, .webp'
+                    } }) }}
+			{{ form_errors(form.logo) }}
+		</div>
+	</div>
+{% endif %}
+
+{#     <div
+        class="flex items-center" data-controller="image-input">
+        <!-- Bind the Stimulus controller -->
+        {{ form_label(registrationForm.avatar, 'Avatar', { 'label_attr': { 'class': 'block text-sm font-medium leading-6 text-gray-900' } }) }}
+        <div
+            class="ml-4">
+            <!-- Specify this input as a target for the Stimulus controller -->
+            {{ form_widget(registrationForm.avatar, { 'attr': { 
+                'class': 'hidden',
+                'data-image-input-target': 'imageInput',
+                'accept': '.jpg, .jpeg, .png, .gif, .svg, .webp'
+            } }) }}
+            <!-- Specify this image as a target for the Stimulus controller -->
+            <label for="registration_form_avatar" class="cursor-pointer">
+                <img
+                src="{{ asset('images/avatars/default.png') }}" alt="Avatar" class="h-12 w-12 rounded-full" data-image-input-target="imagePreview">
+            <!-- Corrected this target name -->
+            </label>
+        </div>
+        {{ form_errors(registrationForm.avatar) }}
+    </div> #}
+
+<div>
+	<button type="submit" class="flex w-md justify-center rounded-md bg-violet-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600">
+		{{ button_label|default('Save') }}
+	</button>
+</div>
+
+{{ form_end(form) }}

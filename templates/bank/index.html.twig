@@ -1,0 +1,48 @@
+{% extends 'admin.html.twig' %}
+
+    {% block html_class %}h-full bg-gray-100
+    {% endblock %}
+    {% block body_class %}h-full
+    {% endblock %}
+
+{% block title %}Bank index{% endblock %}
+
+{% block content %}
+    <h1>Bank index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Brand</th>
+                <th>Url</th>
+                <th>Priority<th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bank in banks %}
+            <tr>
+                <td>
+                    <img src="{{ asset(bank.logo) }}" alt="{{ bank.brand }}" class="h-12 w-12 rounded-md">
+                </td>
+                <td>{{ bank.brand }}</td>
+                <td>
+                    <a href="{{ bank.url }}" target="_blank">web</a>
+                </td>
+                <td>{{ bank.priority }}</td>
+                <td>
+                    <a href="{{ path('admin_bank_show', {'id': bank.id}) }}">show</a>
+                    <a href="{{ path('admin_bank_edit', {'id': bank.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_bank_new') }}">Create new</a>
+{% endblock %}

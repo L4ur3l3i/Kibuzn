@@ -47,8 +47,12 @@ class Account
     #[ORM\OneToMany(targetEntity: RecurringTransaction::class, mappedBy: 'account')]
     private Collection $recurringTransactions;
 
-    #[ORM\Column(length: 2)]
-    private ?string $acronym = null;
+    #[ORM\Column]
+    private ?bool $is_default = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Bank $bank = null;
 
     public function __construct()
     {
@@ -195,14 +199,26 @@ class Account
         return $this;
     }
 
-    public function getAcronym(): ?string
+    public function isDefault(): ?bool
     {
-        return $this->acronym;
+        return $this->is_default;
     }
 
-    public function setAcronym(string $acronym): static
+    public function setDefault(bool $is_default): static
     {
-        $this->acronym = $acronym;
+        $this->is_default = $is_default;
+
+        return $this;
+    }
+
+    public function getBank(): ?Bank
+    {
+        return $this->bank;
+    }
+
+    public function setBank(?Bank $bank): static
+    {
+        $this->bank = $bank;
 
         return $this;
     }

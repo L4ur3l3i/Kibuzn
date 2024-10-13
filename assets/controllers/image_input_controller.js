@@ -4,7 +4,7 @@ export default class extends Controller {
 	static targets = ['imageInput', 'imagePreview'];
 
 	connect() {
-		// Add an event listener to the avatar input
+		// Add an event listener to the image input
 		this.imageInputTarget.addEventListener('change', (event) => {
 			const file = event.target.files[0]; // Get the selected file
 
