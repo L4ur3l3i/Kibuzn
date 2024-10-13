@@ -74,7 +74,18 @@ class RegistrationController extends AbstractController
                     ->from(new Address('mailer@kibuzn.org', 'Kibuzn'))
                     ->to((string) $user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('email/user/email_confirmation.html.twig')
+                    ->context([
+                        'user' => $user,
+                    ])
+            );
+
+            $this->addFlash(
+                'success',
+                [
+                    'message' => 'Registration successful.',
+                    'description' => 'A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your email.',
+                ]
             );
     
             return $this->redirectToRoute('app_login');
