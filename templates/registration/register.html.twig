@@ -74,7 +74,8 @@
 									<!-- Specify this input as a target for the Stimulus controller -->
 									{{ form_widget(registrationForm.avatar, { 'attr': { 
                                         'class': 'hidden',
-                                        'data-register-avatar-input-target': 'avatarInput' 
+                                        'data-register-avatar-input-target': 'avatarInput',
+										'accept': '.jpg, .jpeg, .png, .gif, .svg, .webp'
                                     } }) }}
 									<!-- Specify this image as a target for the Stimulus controller -->
 									<label for="registration_form_avatar" class="cursor-pointer">
