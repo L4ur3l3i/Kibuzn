@@ -23,3 +23,8 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Still ignore everything inside /public/uploads/users/
+/public/uploads/users/*
+# But allow the .gitignore file inside /public/uploads/users/ to be tracked
+!/public/uploads/users/.gitignore
