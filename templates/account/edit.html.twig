@@ -1,13 +1,26 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Edit Account{% endblock %}
 
-{% block body %}
-    <h1>Edit Account</h1>
+{% block content %}
+    <div class="sm:flex sm:items-center mb-8">
+        <div class="sm:flex-auto">
+            <!-- Back button -->
+            {% include '_elements/_back_button.html.twig' with {'to': 'Accounts', 'route': path('app_account_index')} %}
+            
+            <!-- Page title -->
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Edit Account</h1>
 
+            <!-- Description -->
+            <p class="mt-2 text-sm text-gray-700">Please update the form below to edit the account details.</p>
+        </div>
+    </div>
+
+    <!-- Account form -->
     {{ include('account/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_account_index') }}">back to list</a>
-
-    {{ include('account/_delete_form.html.twig') }}
+    <!-- Delete form -->
+    <div class="mt-6">
+        {{ include('account/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

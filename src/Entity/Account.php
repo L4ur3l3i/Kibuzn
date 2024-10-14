@@ -47,12 +47,12 @@ class Account
     #[ORM\OneToMany(targetEntity: RecurringTransaction::class, mappedBy: 'account')]
     private Collection $recurringTransactions;
 
-    #[ORM\Column]
-    private ?bool $is_default = null;
-
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Bank::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Bank $bank = null;
+
+    #[ORM\Column]
+    private ?bool $main = null;
 
     public function __construct()
     {
@@ -199,18 +199,6 @@ class Account
         return $this;
     }
 
-    public function isDefault(): ?bool
-    {
-        return $this->is_default;
-    }
-
-    public function setDefault(bool $is_default): static
-    {
-        $this->is_default = $is_default;
-
-        return $this;
-    }
-
     public function getBank(): ?Bank
     {
         return $this->bank;
@@ -219,6 +207,18 @@ class Account
     public function setBank(?Bank $bank): static
     {
         $this->bank = $bank;
+
+        return $this;
+    }
+
+    public function isMain(): ?bool
+    {
+        return $this->main;
+    }
+
+    public function setMain(bool $main): static
+    {
+        $this->main = $main;
 
         return $this;
     }
