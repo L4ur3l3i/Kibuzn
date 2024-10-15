@@ -2,6 +2,8 @@
     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ transaction.transactionDate ? transaction.transactionDate|date('d/m') : '' }}</td>
     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ transaction.description }}</td>
     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ transaction.amount }}</td>
-    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><a href="{{ path('app_transaction_show', {'id': transaction.id}) }}">show</a>
-    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a></td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}" class="text-violet-600 hover:text-violet-500">show</a>
+        <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}" class="ml-4 text-violet-600 hover:text-violet-500">edit</a>
+    </td>
 </tr>

@@ -16,8 +16,11 @@
 
 		</div>
 
-        {{ include('transaction/fragments/_form_nav.html.twig') }}
+        {% include('transaction/fragments/_form_nav.html.twig') with {
+			'one_time_route': 'app_transaction_new',
+			'recurring_route': 'app_recurring_transaction_new'
+		} %}
 
-		{{ include('transaction/_form.html.twig') }}
+		{% include('transaction/_form.html.twig') %}
 
 {% endblock %}

@@ -1,0 +1,11 @@
+<tr>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ recurring_transaction.amount }}</td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ recurring_transaction.description }}</td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ recurring_transaction.recurrenceInterval }}</td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ recurring_transaction.recurrenceValue }}</td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ recurring_transaction.recurrenceEndDate ? recurring_transaction.recurrenceEndDate|date('Y-m-d') : '' }}</td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <a href="{{ path('app_recurring_transaction_show', {'id': recurring_transaction.id}) }}" class="text-indigo-600 hover:text-indigo-900">Show</a>
+        <a href="{{ path('app_recurring_transaction_edit', {'id': recurring_transaction.id}) }}" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
+    </td>
+</tr>
