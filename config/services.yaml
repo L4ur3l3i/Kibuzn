@@ -35,3 +35,6 @@ services:
     Kibuzn\Security\UserChecker:
         tags:
             - { name: 'security.user_checker' }
+
+    Kibuzn\Twig\AccountExtension:
+        tags: ['twig.extension']

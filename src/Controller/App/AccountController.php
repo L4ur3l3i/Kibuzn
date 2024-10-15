@@ -7,7 +7,9 @@ use Kibuzn\Entity\Account;
 use Kibuzn\Form\AccountType;
 use Kibuzn\Entity\User;
 use Kibuzn\Repository\AccountRepository;
+use Kibuzn\Service\AccountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -108,5 +110,16 @@ final class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('app_account_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/set-selected-account/{id}', name: 'api_selected_account', methods: ['POST'])]
+    public function setSelectedAccount(Account $account, AccountService $accountService): JsonResponse
+    {
+        if ($account) {
+            $accountService->setSelectedAccount($account);
+            return new JsonResponse(['success' => true]);
+        }
+
+        return new JsonResponse(['success' => false], 400);
     }
 }

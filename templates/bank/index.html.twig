@@ -23,15 +23,15 @@
         <tbody>
         {% for bank in banks %}
             <tr>
-                <td>
+                <td class="p-2">
                     <img src="{{ asset(bank.logo) }}" alt="{{ bank.brand }}" class="h-12 w-12 rounded-md">
                 </td>
-                <td>{{ bank.brand }}</td>
-                <td>
+                <td class="p-2">{{ bank.brand }}</td>
+                <td class="p-2">
                     <a href="{{ bank.url }}" target="_blank">web</a>
                 </td>
-                <td>{{ bank.priority }}</td>
-                <td>
+                <td class="p-2">{{ bank.priority }}</td>
+                <td class="p-2">
                     <a href="{{ path('admin_bank_show', {'id': bank.id}) }}">show</a>
                     <a href="{{ path('admin_bank_edit', {'id': bank.id}) }}">edit</a>
                 </td>

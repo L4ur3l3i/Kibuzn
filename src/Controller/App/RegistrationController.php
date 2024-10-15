@@ -7,7 +7,7 @@ use Kibuzn\Entity\User;
 use Kibuzn\Form\RegistrationFormType;
 use Kibuzn\Repository\UserRepository;
 use Kibuzn\Security\EmailVerifier;
-use Kibuzn\Services\MediaServices;
+use Kibuzn\Service\MediaService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,8 +58,8 @@ class RegistrationController extends AbstractController
             $avatar = $form->get('avatar')->getData(); // This returns an UploadedFile object
     
             if ($avatar) {
-                // Use MediaServices to handle the avatar file upload, now we have the user ID
-                $filename = MediaServices::uploadMedia('avatar', $avatar, $user->getId());
+                // Use MediaService to handle the avatar file upload, now we have the user ID
+                $filename = MediaService::uploadMedia('avatar', $avatar, $user->getId());
     
                 if ($filename) {
                     $user->setAvatar($filename);

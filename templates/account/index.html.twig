@@ -32,17 +32,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     {% for account in accounts %}
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset(account.bank.logo) }}" alt="{{ account.name }}" class="w-12 h-12 rounded-md">
-                                            </td>
-                                            <td>{{ account.name }}</td>
-                                            <td>{{ account.main ? 'Yes' : 'No' }}</td>
-                                            <td>
-                                                <a href="{{ path('app_account_show', {'id': account.id}) }}" class="text-violet-600 hover:text-violet-500">Show</a>
-                                                <a href="{{ path('app_account_edit', {'id': account.id}) }}" class="ml-4 text-violet-600 hover:text-violet-500">Edit</a>
-                                            </td>
-                                        </tr>
+                                        {% include "/account/fragments/_index_row.html.twig" with {account: account} %}
                                     {% else %}
                                         <tr>
                                             <td colspan="4" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">No records found.</td>

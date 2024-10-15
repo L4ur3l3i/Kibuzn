@@ -1,11 +1,11 @@
 <?php
 
-namespace Kibuzn\Services;
+namespace Kibuzn\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Uid\Uuid;
 
-class MediaServices
+class MediaService
 {
     public const USER_DIRECTORY = 'uploads/users/';
     public const MISC_DIRECTORY = 'uploads/misc/';
