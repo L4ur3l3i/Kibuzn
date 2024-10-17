@@ -2,6 +2,8 @@
 
 namespace Kibuzn\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -9,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Kibuzn\Repository\RecurringTransactionRepository;
 
 #[ORM\Entity(repositoryClass: RecurringTransactionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class RecurringTransaction
 {
     #[ORM\Id]
@@ -22,23 +25,14 @@ class RecurringTransaction
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $recurrence_interval = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $recurrence_value = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $recurrence_end_date = null;
+    #[ORM\Column]
+    private ?DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?DateTimeImmutable $updated_at = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $deleted_at = null;
+    private ?DateTimeImmutable $deleted_at = null;
 
     /**
      * @var Collection<int, Transaction>
@@ -49,6 +43,24 @@ class RecurringTransaction
     #[ORM\ManyToOne(inversedBy: 'recurringTransactions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?DateTimeInterface $start_date = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $iterations = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?DateTimeInterface $end_date = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $interval_type = null;
+
+    #[ORM\Column]
+    private ?int $interval_value = null;
+
+    #[ORM\Column]
+    private ?bool $permanent = null;
 
     public function __construct()
     {
@@ -84,72 +96,36 @@ class RecurringTransaction
         return $this;
     }
 
-    public function getRecurrenceInterval(): ?string
-    {
-        return $this->recurrence_interval;
-    }
-
-    public function setRecurrenceInterval(string $recurrence_interval): static
-    {
-        $this->recurrence_interval = $recurrence_interval;
-
-        return $this;
-    }
-
-    public function getRecurrenceValue(): ?int
-    {
-        return $this->recurrence_value;
-    }
-
-    public function setRecurrenceValue(?int $recurrence_value): static
-    {
-        $this->recurrence_value = $recurrence_value;
-
-        return $this;
-    }
-
-    public function getRecurrenceEndDate(): ?\DateTimeInterface
-    {
-        return $this->recurrence_end_date;
-    }
-
-    public function setRecurrenceEndDate(?\DateTimeInterface $recurrence_end_date): static
-    {
-        $this->recurrence_end_date = $recurrence_end_date;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    #[ORM\PrePersist]
+    public function setCreatedAt(): void
     {
-        $this->created_at = $created_at;
-
-        return $this;
+        $now = new DateTimeImmutable();
+        $this->created_at = $now;
+        $this->updated_at = $now;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        $this->updated_at = $updated_at;
-
-        return $this;
+        $this->updated_at = new DateTimeImmutable();
     }
 
-    public function getDeletedAt(): ?\DateTimeImmutable
+    public function getDeletedAt(): ?DateTimeImmutable
     {
         return $this->deleted_at;
     }
 
-    public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
+    public function setDeletedAt(?DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
 
@@ -168,7 +144,7 @@ class RecurringTransaction
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions->add($transaction);
-            $transaction->setRecurringTransactionId($this);
+            $transaction->setRecurringTransaction($this);
         }
 
         return $this;
@@ -178,8 +154,8 @@ class RecurringTransaction
     {
         if ($this->transactions->removeElement($transaction)) {
             // set the owning side to null (unless already changed)
-            if ($transaction->getRecurringTransactionId() === $this) {
-                $transaction->setRecurringTransactionId(null);
+            if ($transaction->getRecurringTransaction() === $this) {
+                $transaction->setRecurringTransaction(null);
             }
         }
 
@@ -194,6 +170,78 @@ class RecurringTransaction
     public function setAccount(?Account $account): static
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    public function getStartDate(): ?DateTimeInterface
+    {
+        return $this->start_date;
+    }
+
+    public function setStartDate(DateTimeInterface $start_date): static
+    {
+        $this->start_date = $start_date;
+
+        return $this;
+    }
+
+    public function getIterations(): ?int
+    {
+        return $this->iterations;
+    }
+
+    public function setIterations(?int $iterations): static
+    {
+        $this->iterations = $iterations;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?DateTimeInterface
+    {
+        return $this->end_date;
+    }
+
+    public function setEndDate(?DateTimeInterface $end_date): static
+    {
+        $this->end_date = $end_date;
+
+        return $this;
+    }
+
+    public function getIntervalType(): ?string
+    {
+        return $this->interval_type;
+    }
+
+    public function setIntervalType(string $interval_type): static
+    {
+        $this->interval_type = $interval_type;
+
+        return $this;
+    }
+
+    public function getIntervalValue(): ?int
+    {
+        return $this->interval_value;
+    }
+
+    public function setIntervalValue(int $interval_value): static
+    {
+        $this->interval_value = $interval_value;
+
+        return $this;
+    }
+
+    public function isPermanent(): ?bool
+    {
+        return $this->permanent;
+    }
+
+    public function setPermanent(bool $permanent): static
+    {
+        $this->permanent = $permanent;
 
         return $this;
     }

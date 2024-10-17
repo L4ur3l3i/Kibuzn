@@ -44,7 +44,8 @@ export default class extends Controller {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Handle success, e.g., reload or update content
+                // Reload the page to reflect the selected account
+                window.location.reload();
                 console.log('Account selection saved:', data);
             } else {
                 // Handle failure

@@ -26,9 +26,6 @@ class Transaction
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $recurrence_number = null;
-
     #[ORM\Column]
     private ?DateTimeImmutable $created_at = null;
 
@@ -46,11 +43,8 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
 
-    #[ORM\Column]
-    private ?bool $recurrent = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $value_date = null;
+    private ?DateTimeInterface $value_date = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $statement_description = null;
@@ -59,17 +53,20 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?OperationType $type = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $iteration_number = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTransactionDate(): ?\DateTimeInterface
+    public function getTransactionDate(): ?DateTimeInterface
     {
         return $this->transaction_date;
     }
 
-    public function setTransactionDate(\DateTimeInterface $transaction_date): static
+    public function setTransactionDate(DateTimeInterface $transaction_date): static
     {
         $this->transaction_date = $transaction_date;
 
@@ -96,18 +93,6 @@ class Transaction
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getRecurrenceNumber(): ?int
-    {
-        return $this->recurrence_number;
-    }
-
-    public function setRecurrenceNumber(?int $recurrence_number): static
-    {
-        $this->recurrence_number = $recurrence_number;
 
         return $this;
     }
@@ -174,24 +159,12 @@ class Transaction
         return $this;
     }
 
-    public function isRecurrent(): ?bool
-    {
-        return $this->recurrent;
-    }
-
-    public function setRecurrent(bool $recurrent): static
-    {
-        $this->recurrent = $recurrent;
-
-        return $this;
-    }
-
-    public function getValueDate(): ?\DateTimeInterface
+    public function getValueDate(): ?DateTimeInterface
     {
         return $this->value_date;
     }
 
-    public function setValueDate(?\DateTimeInterface $value_date): static
+    public function setValueDate(?DateTimeInterface $value_date): static
     {
         $this->value_date = $value_date;
 
@@ -218,6 +191,18 @@ class Transaction
     public function setType(?OperationType $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getIterationNumber(): ?int
+    {
+        return $this->iteration_number;
+    }
+
+    public function setIterationNumber(?int $iteration_number): static
+    {
+        $this->iteration_number = $iteration_number;
 
         return $this;
     }

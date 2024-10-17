@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <th>Amount</th>
-                <td>{{ recurring_transaction.amount }}</td>
+                <td>{{ recurring_transaction.amount|number_format(2, ',', ' ') }}</td>
             </tr>
             <tr>
                 <th>Description</th>

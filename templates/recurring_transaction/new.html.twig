@@ -1,11 +1,26 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}New RecurringTransaction{% endblock %}
-
-{% block body %}
-    <h1>Create new RecurringTransaction</h1>
-
-    {{ include('recurring_transaction/_form.html.twig') }}
-
-    <a href="{{ path('app_recurring_transaction_index') }}">back to list</a>
-{% endblock %}
+    {% block title %}New Recurring Transaction
+    {% endblock %}
+    
+    {% block content %}
+    
+            <div class="sm:flex sm:items-center">
+    
+                <div class="sm:flex-auto">
+                    {% include '_elements/_back_button.html.twig' with {'to': 'Recurring Transactions', 'route': path('app_recurring_transaction_index')} %}
+                    <h1 class="text-base font-semibold leading-6 text-gray-900">Create a new Recurring Transaction</h1>
+                    <p class="mt-2 text-sm text-gray-700">Please fill in the form below to create a new recurring transaction.
+                    </p>
+                </div>
+    
+            </div>
+    
+            {% include('recurring_transaction/fragments/_form_nav.html.twig') with {
+                'one_time_route': 'app_transaction_new',
+                'recurring_route': 'app_recurring_transaction_new'
+            } %}
+    
+            {% include('recurring_transaction/_form.html.twig') %}
+    
+    {% endblock %}

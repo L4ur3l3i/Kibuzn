@@ -17,10 +17,10 @@ use Symfony\Component\Routing\Attribute\Route;
 final class TransactionController extends AbstractController
 {
     #[Route(name: 'app_transaction_index', methods: ['GET'])]
-    public function index(TransactionRepository $transactionRepository): Response
+    public function index(TransactionRepository $transactionRepository, AccountService $accountService): Response
     {
         return $this->render('transaction/index.html.twig', [
-            'transactions' => $transactionRepository->findAll(),
+            'transactions' => $transactionRepository->findBy(['account' => $accountService->getSelectedAccount()]),
         ]);
     }
 
@@ -33,7 +33,6 @@ final class TransactionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $transaction->setAccount($accountService->getSelectedAccount());
-            $transaction->setRecurrent(false);
 
             $entityManager->persist($transaction);
             $entityManager->flush();
