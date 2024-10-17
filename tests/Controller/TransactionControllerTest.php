@@ -52,7 +52,7 @@ final class TransactionControllerTest extends WebTestCase
             'transaction[amount]' => 'Testing',
             'transaction[type]' => 'Testing',
             'transaction[description]' => 'Testing',
-            'transaction[is_recurrent]' => 'Testing',
+            'transaction[recurrent]' => 'Testing',
             'transaction[recurrence_number]' => 'Testing',
             'transaction[created_at]' => 'Testing',
             'transaction[updated_at]' => 'Testing',
@@ -73,7 +73,7 @@ final class TransactionControllerTest extends WebTestCase
         $fixture->setAmount('My Title');
         $fixture->setType('My Title');
         $fixture->setDescription('My Title');
-        $fixture->setIs_recurrent('My Title');
+        $fixture->setRecurrent('My Title');
         $fixture->setRecurrence_number('My Title');
         $fixture->setCreated_at('My Title');
         $fixture->setUpdated_at('My Title');
@@ -99,7 +99,7 @@ final class TransactionControllerTest extends WebTestCase
         $fixture->setAmount('Value');
         $fixture->setType('Value');
         $fixture->setDescription('Value');
-        $fixture->setIs_recurrent('Value');
+        $fixture->setRecurrent('Value');
         $fixture->setRecurrence_number('Value');
         $fixture->setCreated_at('Value');
         $fixture->setUpdated_at('Value');
@@ -116,7 +116,7 @@ final class TransactionControllerTest extends WebTestCase
             'transaction[amount]' => 'Something New',
             'transaction[type]' => 'Something New',
             'transaction[description]' => 'Something New',
-            'transaction[is_recurrent]' => 'Something New',
+            'transaction[recurrent]' => 'Something New',
             'transaction[recurrence_number]' => 'Something New',
             'transaction[created_at]' => 'Something New',
             'transaction[updated_at]' => 'Something New',
@@ -132,7 +132,7 @@ final class TransactionControllerTest extends WebTestCase
         self::assertSame('Something New', $fixture[0]->getAmount());
         self::assertSame('Something New', $fixture[0]->getType());
         self::assertSame('Something New', $fixture[0]->getDescription());
-        self::assertSame('Something New', $fixture[0]->getIs_recurrent());
+        self::assertSame('Something New', $fixture[0]->getRecurrent());
         self::assertSame('Something New', $fixture[0]->getRecurrence_number());
         self::assertSame('Something New', $fixture[0]->getCreated_at());
         self::assertSame('Something New', $fixture[0]->getUpdated_at());
@@ -148,7 +148,7 @@ final class TransactionControllerTest extends WebTestCase
         $fixture->setAmount('Value');
         $fixture->setType('Value');
         $fixture->setDescription('Value');
-        $fixture->setIs_recurrent('Value');
+        $fixture->setRecurrent('Value');
         $fixture->setRecurrence_number('Value');
         $fixture->setCreated_at('Value');
         $fixture->setUpdated_at('Value');

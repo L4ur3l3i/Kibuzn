@@ -2,6 +2,7 @@
 
 namespace Kibuzn\Form;
 
+use Kibuzn\Entity\OperationType;
 use Kibuzn\Entity\RecurringTransaction;
 use Kibuzn\Entity\Transaction;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,9 +18,13 @@ class TransactionType extends AbstractType
             ->add('transaction_date', null, [
                 'widget' => 'single_text',
             ])
+            ->add('type', EntityType::class, [
+                'class' => OperationType::class,
+                'choice_label' => 'name',
+            ])
             ->add('description')
             ->add('amount')
-//            ->add('is_recurrent')
+//            ->add('recurrent')
 //            ->add('recurrence_number')
 //            ->add('created_at', null, [
 //                'widget' => 'single_text',

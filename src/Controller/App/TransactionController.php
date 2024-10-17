@@ -3,9 +3,11 @@
 namespace Kibuzn\Controller\App;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Kibuzn\Entity\Account;
 use Kibuzn\Entity\Transaction;
 use Kibuzn\Form\TransactionType;
 use Kibuzn\Repository\TransactionRepository;
+use Kibuzn\Service\AccountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +25,16 @@ final class TransactionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, AccountService $accountService): Response
     {
         $transaction = new Transaction();
         $form = $this->createForm(TransactionType::class, $transaction);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $transaction->setAccount($accountService->getSelectedAccount());
+            $transaction->setRecurrent(false);
+
             $entityManager->persist($transaction);
             $entityManager->flush();
 

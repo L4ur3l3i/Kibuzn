@@ -26,9 +26,6 @@ class Transaction
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?bool $is_recurrent = false;
-
     #[ORM\Column(nullable: true)]
     private ?int $recurrence_number = null;
 
@@ -48,6 +45,19 @@ class Transaction
     #[ORM\ManyToOne(inversedBy: 'transactions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
+
+    #[ORM\Column]
+    private ?bool $recurrent = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $value_date = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statement_description = null;
+
+    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?OperationType $type = null;
 
     public function getId(): ?int
     {
@@ -86,18 +96,6 @@ class Transaction
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function isRecurrent(): ?bool
-    {
-        return $this->is_recurrent;
-    }
-
-    public function setRecurrent(bool $is_recurrent): static
-    {
-        $this->is_recurrent = $is_recurrent;
 
         return $this;
     }
@@ -172,6 +170,54 @@ class Transaction
     public function setAccount(?Account $account): static
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    public function isRecurrent(): ?bool
+    {
+        return $this->recurrent;
+    }
+
+    public function setRecurrent(bool $recurrent): static
+    {
+        $this->recurrent = $recurrent;
+
+        return $this;
+    }
+
+    public function getValueDate(): ?\DateTimeInterface
+    {
+        return $this->value_date;
+    }
+
+    public function setValueDate(?\DateTimeInterface $value_date): static
+    {
+        $this->value_date = $value_date;
+
+        return $this;
+    }
+
+    public function getStatementDescription(): ?string
+    {
+        return $this->statement_description;
+    }
+
+    public function setStatementDescription(?string $statement_description): static
+    {
+        $this->statement_description = $statement_description;
+
+        return $this;
+    }
+
+    public function getType(): ?OperationType
+    {
+        return $this->type;
+    }
+
+    public function setType(?OperationType $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

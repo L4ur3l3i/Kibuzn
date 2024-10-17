@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New OperationType{% endblock %}
+
+{% block body %}
+    <h1>Create new OperationType</h1>
+
+    {{ include('operation_type/_form.html.twig') }}
+
+    <a href="{{ path('admin_operation_type_index') }}">back to list</a>
+{% endblock %}
