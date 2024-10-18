@@ -9,9 +9,8 @@
         {{ recurring_transaction.startDate|date('Y-m-d') }}
     </td>
     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        {% if recurring_transaction.permanent %}
-            Permanent
-        {% elseif recurring_transaction.endDate %}
+        <!-- put something for permanent -->
+        {% if recurring_transaction.endDate %}
             {{ recurring_transaction.endDate|date('Y-m-d') }}
         {% elseif recurring_transaction.iterations %}
             {{ recurring_transaction.iterations }} iterations

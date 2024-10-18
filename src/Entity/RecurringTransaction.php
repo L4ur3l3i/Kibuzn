@@ -59,8 +59,9 @@ class RecurringTransaction
     #[ORM\Column]
     private ?int $interval_value = null;
 
-    #[ORM\Column]
-    private ?bool $permanent = null;
+    #[ORM\ManyToOne(inversedBy: 'recurringTransactions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?OperationType $Type = null;
 
     public function __construct()
     {
@@ -234,14 +235,14 @@ class RecurringTransaction
         return $this;
     }
 
-    public function isPermanent(): ?bool
+    public function getType(): ?OperationType
     {
-        return $this->permanent;
+        return $this->Type;
     }
 
-    public function setPermanent(bool $permanent): static
+    public function setType(?OperationType $Type): static
     {
-        $this->permanent = $permanent;
+        $this->Type = $Type;
 
         return $this;
     }

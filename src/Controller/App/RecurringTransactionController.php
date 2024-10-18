@@ -32,16 +32,8 @@ final class RecurringTransactionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $recurringTransaction->setAccount($accountService->getSelectedAccount());
-
-            // Handle the end date
-            if ($recurringTransaction->isPermanent()) {
-                $recurringTransaction->setEndDate(null);
-                $recurringTransaction->setIterations(null);
-            }
-
             $entityManager->persist($recurringTransaction);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_recurring_transaction_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -66,14 +58,7 @@ final class RecurringTransactionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle the end date
-            if ($recurringTransaction->isPermanent()) {
-                $recurringTransaction->setEndDate(null);
-                $recurringTransaction->setIterations(null);
-            }
-            
             $entityManager->flush();
-
             return $this->redirectToRoute('app_recurring_transaction_index', [], Response::HTTP_SEE_OTHER);
         }
 

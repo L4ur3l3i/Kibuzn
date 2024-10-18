@@ -27,9 +27,16 @@ class OperationType
     #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'type')]
     private Collection $transactions;
 
+    /**
+     * @var Collection<int, RecurringTransaction>
+     */
+    #[ORM\OneToMany(targetEntity: RecurringTransaction::class, mappedBy: 'Type')]
+    private Collection $recurringTransactions;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->recurringTransactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +92,36 @@ class OperationType
             // set the owning side to null (unless already changed)
             if ($transaction->getType() === $this) {
                 $transaction->setType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecurringTransaction>
+     */
+    public function getRecurringTransactions(): Collection
+    {
+        return $this->recurringTransactions;
+    }
+
+    public function addRecurringTransaction(RecurringTransaction $recurringTransaction): static
+    {
+        if (!$this->recurringTransactions->contains($recurringTransaction)) {
+            $this->recurringTransactions->add($recurringTransaction);
+            $recurringTransaction->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecurringTransaction(RecurringTransaction $recurringTransaction): static
+    {
+        if ($this->recurringTransactions->removeElement($recurringTransaction)) {
+            // set the owning side to null (unless already changed)
+            if ($recurringTransaction->getType() === $this) {
+                $recurringTransaction->setType(null);
             }
         }
 

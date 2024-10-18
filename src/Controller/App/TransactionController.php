@@ -3,7 +3,6 @@
 namespace Kibuzn\Controller\App;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Kibuzn\Entity\Account;
 use Kibuzn\Entity\Transaction;
 use Kibuzn\Form\TransactionType;
 use Kibuzn\Repository\TransactionRepository;
